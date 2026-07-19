@@ -17,20 +17,17 @@ class ItemController extends Controller
     // 商品一覧画面を表示
     public function index(Request $request)
     {
-        // タブ名と検索キーワードをバリデーション
         $validated = $request->validate([
             'tab' => ['nullable', 'in:mylist'],
             'keyword' => ['nullable', 'string', 'max:255'],
         ]);
 
-        // バリデーション済みの値を取得
         $tab = $validated['tab'] ?? null;
         $keyword = $validated['keyword'] ?? null;
 
-        // マイリストタブの場合
         if ($tab === 'mylist') {
-            // ログイン中の場合、いいねした商品を取得
             if (Auth::check()) {
+                // ログインユーザーがいいねした商品を取得
                 $items = Auth::user()
                     ->likedItems()
                     ->with(['condition', 'categories'])
@@ -43,18 +40,18 @@ class ItemController extends Controller
                     ->latest('items.created_at')
                     ->get();
             } else {
-                // 未ログインの場合は空の一覧を表示
+                // 未ログイン時のマイリストは空で表示
                 $items = collect();
             }
         } else {
             // 通常の商品一覧を取得
             $items = Item::with(['condition', 'categories'])
-                // ログイン中は自分が出品した商品を除外
                 ->when(Auth::check(), function ($query) {
+                    // ログイン中は自分が出品した商品を除外
                     $query->where('user_id', '!=', Auth::id());
                 })
-                // 商品名またはブランド名で検索
                 ->when($keyword, function ($query, $keyword) {
+                    // 商品名またはブランド名で検索
                     $query->where(function ($query) use ($keyword) {
                         $query->where('items.name', 'like', '%' . $keyword . '%')
                             ->orWhere('items.brand_name', 'like', '%' . $keyword . '%');
@@ -76,15 +73,15 @@ class ItemController extends Controller
         return view('items.create', compact('categories', 'conditions'));
     }
 
-    // 商品を出品
+    // 商品を登録
     public function store(SellRequest $request)
     {
         $validated = $request->validated();
 
-        // 商品画像をstorage/app/public/itemsに保存
+        // 商品画像を保存
         $imagePath = $request->file('image')->store('items', 'public');
 
-        // 商品を登録
+        // 商品情報を保存
         $item = Item::create([
             'user_id' => Auth::id(),
             'condition_id' => $validated['condition_id'],
@@ -96,7 +93,7 @@ class ItemController extends Controller
             'is_sold' => false,
         ]);
 
-        // カテゴリーを登録
+        // 商品とカテゴリーを紐づけ
         $item->categories()->attach($validated['category_ids']);
 
         return redirect()
@@ -113,6 +110,7 @@ class ItemController extends Controller
         $isLiked = false;
 
         if (Auth::check()) {
+            // ログインユーザーがこの商品をいいね済みか確認
             $isLiked = $item->likes()
                 ->where('user_id', Auth::id())
                 ->exists();
@@ -121,7 +119,7 @@ class ItemController extends Controller
         return view('items.show', compact('item', 'isLiked'));
     }
 
-    // いいねを追加または解除
+    // いいねを追加・解除
     public function toggleLike(Item $item)
     {
         $user = Auth::user();
@@ -131,8 +129,10 @@ class ItemController extends Controller
             ->first();
 
         if ($like) {
+            // いいね済みなら解除
             $like->delete();
         } else {
+            // 未いいねなら追加
             $item->likes()->create([
                 'user_id' => $user->id,
             ]);
@@ -141,7 +141,7 @@ class ItemController extends Controller
         return redirect()->back();
     }
 
-    // 商品にコメントを投稿
+    // コメントを投稿
     public function storeComment(CommentRequest $request, Item $item)
     {
         $validated = $request->validated();
@@ -154,22 +154,22 @@ class ItemController extends Controller
         return redirect()->route('items.show', $item);
     }
 
-    // 出品した商品を削除
+    // 出品商品を削除
     public function destroy(Item $item)
     {
-        // 自分が出品した商品以外は削除できない
+        // 自分が出品した商品以外は削除不可
         if ($item->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // 購入済み商品は削除できない
+        // 購入済み商品は削除不可
         if ($item->is_sold) {
             return redirect()
                 ->route('items.show', $item)
                 ->with('error', '購入済みの商品は削除できません');
         }
 
-        // storageに保存した画像の場合のみ、画像ファイルも削除
+        // storage保存画像の場合は画像ファイルも削除
         if (
             $item->image &&
             !Str::startsWith($item->image, ['http://', 'https://'])

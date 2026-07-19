@@ -6,22 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PurchaseRequest extends FormRequest
 {
-    //リクエストを許可
+    // 商品購入を許可
     public function authorize(): bool
     {
         return true;
     }
 
-    //支払い方法の入力ルールを設定
+    // 商品購入時のバリデーションルール
     public function rules(): array
     {
-        //コンビニ支払いもしくはカード支払い
         return [
             'payment_method' => ['required', 'in:convenience,card'],
         ];
     }
 
-    //バリデーションエラーメッセージを設定
+    // 独自のエラーメッセージ
     public function messages(): array
     {
         return [
@@ -30,7 +29,7 @@ class PurchaseRequest extends FormRequest
         ];
     }
 
-    //エラーメッセージで表示する項目を設定
+    // バリデーションエラー時の項目名
     public function attributes(): array
     {
         return [

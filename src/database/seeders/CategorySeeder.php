@@ -7,9 +7,9 @@ use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
+    // カテゴリーの初期データを登録
     public function run(): void
     {
-        //商品カテゴリの初期データ
         $categories = [
             'ファッション',
             '家電',
@@ -27,8 +27,8 @@ class CategorySeeder extends Seeder
             'ベビー・キッズ',
         ];
 
-        //初期データを登録(※既に存在する場合は登録しない)
         foreach ($categories as $category) {
+            // 同じカテゴリー名がなければ登録
             Category::firstOrCreate([
                 'name' => $category,
             ]);

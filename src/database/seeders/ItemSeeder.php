@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class ItemSeeder extends Seeder
 {
+    // 商品の初期データを登録
     public function run(): void
     {
-        //商品を出品するテストユーザーを作成(※既に存在する場合は作成しない)
+        // 商品を出品するテストユーザーを作成
         $user = User::firstOrCreate(
             ['email' => 'seller@example.com'],
             [
@@ -25,7 +26,7 @@ class ItemSeeder extends Seeder
             ]
         );
 
-        //商品の初期データ
+        // 商品の初期データ
         $items = [
             [
                 'name' => '腕時計',
@@ -35,7 +36,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
                 'image' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
                 'categories' => ['ファッション', 'メンズ', 'アクセサリー'],
-            ], // 以下、同じ形式で商品データを追加
+            ],
             [
                 'name' => 'HDD',
                 'brand_name' => '西芝',
@@ -119,13 +120,11 @@ class ItemSeeder extends Seeder
             ],
         ];
 
-        //商品データを登録
         foreach ($items as $itemData) {
-
-            //商品状態からconditionsテーブルのデータを取得
+            // 商品状態を取得
             $condition = Condition::where('name', $itemData['condition'])->first();
 
-            //商品を登録(※同じ商品が存在する場合は作成不可)
+            // 商品を登録
             $item = Item::firstOrCreate(
                 ['name' => $itemData['name']],
                 [
@@ -139,10 +138,12 @@ class ItemSeeder extends Seeder
                 ]
             );
 
-            //カテゴリ名からcategoriesテーブルのID一覧を取得
-            $categoryIds = Category::whereIn('name', $itemData['categories'])->pluck('id')->toArray();
+            // カテゴリーIDを取得
+            $categoryIds = Category::whereIn('name', $itemData['categories'])
+                ->pluck('id')
+                ->toArray();
 
-            //商品とカテゴリを中間テーブル(category_item)に登録
+            // 商品とカテゴリーを紐づけ
             $item->categories()->syncWithoutDetaching($categoryIds);
         }
     }

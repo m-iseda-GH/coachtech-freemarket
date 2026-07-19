@@ -7,9 +7,9 @@ use Illuminate\Database\Seeder;
 
 class ConditionSeeder extends Seeder
 {
+    // 商品状態の初期データを登録
     public function run(): void
     {
-        //商品情報の初期データ
         $conditions = [
             '良好',
             '目立った傷や汚れなし',
@@ -17,8 +17,8 @@ class ConditionSeeder extends Seeder
             '状態が悪い',
         ];
 
-        //初期データを登録(※既に存在する場合は登録しない)
         foreach ($conditions as $condition) {
+            // 同じ状態名がなければ登録
             Condition::firstOrCreate([
                 'name' => $condition,
             ]);

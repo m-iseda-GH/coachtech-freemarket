@@ -6,21 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CommentRequest extends FormRequest
 {
-    //リクエストを利用できるか判定(常に利用可能)
+    // コメント投稿を許可
     public function authorize(): bool
     {
         return true;
     }
 
+    // コメント投稿時のバリデーションルール
     public function rules(): array
     {
-        //コメント欄のバリデーションルール設定
         return [
             'comment' => ['required', 'string', 'max:255'],
         ];
     }
 
-    //表示されるエラーメッセージの項目名
+    // バリデーションエラー時の項目名
     public function attributes(): array
     {
         return [

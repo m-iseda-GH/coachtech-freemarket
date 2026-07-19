@@ -6,16 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // categoriesテーブルを作成
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            //商品カテゴリの重複禁止
-            $table->string('name')->unique();
+            $table->string('name')->unique(); // カテゴリー名
             $table->timestamps();
         });
     }
 
+    // categoriesテーブルを削除
     public function down(): void
     {
         Schema::dropIfExists('categories');

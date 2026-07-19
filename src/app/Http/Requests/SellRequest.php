@@ -6,43 +6,28 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SellRequest extends FormRequest
 {
-    // このリクエストの使用を許可
+    // 商品出品を許可
     public function authorize(): bool
     {
         return true;
     }
 
-    // 商品出品フォームの入力ルールを設定
+    // 商品出品時のバリデーションルール
     public function rules(): array
     {
         return [
-            // 商品画像は必須・画像形式・ipegまたはpng
             'image' => ['required', 'image', 'mimes:jpeg,png'],
-
-            // カテゴリーは1つ以上選択
             'category_ids' => ['required', 'array', 'min:1'],
-
-            // 選択されたカテゴリーIDがcategoriesテーブルに存在するか確認
             'category_ids.*' => ['exists:categories,id'],
-
-            // 商品状態IDがcongitionsテーブルに存在するか確認
             'condition_id' => ['required', 'exists:conditions,id'],
-
-            // 商品名は必須・文字列・255文字以内
             'name' => ['required', 'string', 'max:255'],
-
-            // ブランド名は任意・文字列・255文字以内
             'brand_name' => ['nullable', 'string', 'max:255'],
-
-            //　商品説明は必須・文字列・1000文字以内
             'description' => ['required', 'string', 'max:1000'],
-
-            // 販売価格は必須・整数・1円以上
             'price' => ['required', 'integer', 'min:1'],
         ];
     }
 
-    // バリデーションエラーメッセージを設定
+    // 独自のエラーメッセージ
     public function messages(): array
     {
         return [
@@ -60,7 +45,7 @@ class SellRequest extends FormRequest
         ];
     }
 
-    // エラーメッセージで表示する項目名を設定
+    // バリデーションエラー時の項目名
     public function attributes(): array
     {
         return [

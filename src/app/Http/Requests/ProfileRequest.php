@@ -6,11 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProfileRequest extends FormRequest
 {
+    // プロフィール更新を許可
     public function authorize(): bool
     {
         return true;
     }
 
+    // プロフィール更新時のバリデーションルール
     public function rules(): array
     {
         return [
@@ -23,6 +25,7 @@ class ProfileRequest extends FormRequest
         ];
     }
 
+    // 独自のエラーメッセージ
     public function messages(): array
     {
         return [
@@ -30,6 +33,7 @@ class ProfileRequest extends FormRequest
         ];
     }
 
+    // バリデーションエラー時の項目名
     public function attributes(): array
     {
         return [

@@ -9,12 +9,15 @@ class Category extends Model
 {
     use HasFactory;
 
-    //一括代入を許可するカラム
-    protected $fillable = ['name'];
+    // 一括代入を許可するカラム
+    protected $fillable = [
+        'name',
+    ];
 
-    //カテゴリに属する商品一覧を取得(created_atやupdated_atも併せて自動更新)
+    // このカテゴリーに紐づく商品
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'category_item')->withTimestamps();
+        return $this->belongsToMany(Item::class, 'category_item')
+            ->withTimestamps();
     }
 }

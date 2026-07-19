@@ -6,16 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // conditionsテーブルを作成
     public function up(): void
     {
         Schema::create('conditions', function (Blueprint $table) {
             $table->id();
-            //商品状態の重複禁止
-            $table->string('name')->unique();
+            $table->string('name')->unique(); // 商品状態名
             $table->timestamps();
         });
     }
 
+    // conditionsテーブルを削除
     public function down(): void
     {
         Schema::dropIfExists('conditions');

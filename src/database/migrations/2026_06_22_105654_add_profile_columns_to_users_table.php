@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // usersテーブルにプロフィール項目を追加
     public function up(): void
     {
-        //プロフィール画像、郵便番号、住所、建物名を追加
         Schema::table('users', function (Blueprint $table) {
             $table->string('profile_image')->nullable()->after('password');
             $table->string('postal_code')->nullable()->after('profile_image');
@@ -17,6 +17,7 @@ return new class extends Migration
         });
     }
 
+    // 追加したプロフィール項目を削除
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {

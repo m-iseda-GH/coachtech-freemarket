@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    // プロフィール編集画面を表示
     public function edit()
     {
         $user = Auth::user();
@@ -15,6 +16,7 @@ class ProfileController extends Controller
         return view('profiles.edit', compact('user'));
     }
 
+    // プロフィール情報を更新
     public function update(ProfileRequest $request)
     {
         $user = Auth::user();
@@ -34,7 +36,7 @@ class ProfileController extends Controller
 
             $data['profile_image'] = null;
         }
-        // 新しいプロフィール画像をアップロードする場合
+        // 新しいプロフィール画像を登録する場合
         elseif ($request->hasFile('profile_image')) {
             if ($user->profile_image) {
                 Storage::disk('public')->delete($user->profile_image);

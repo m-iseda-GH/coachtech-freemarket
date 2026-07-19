@@ -6,23 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // itemsテーブルを作成
     public function up(): void
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
+
+            // 出品者ID
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            // 商品状態ID
             $table->foreignId('condition_id')->constrained()->cascadeOnDelete();
+
             $table->string('name');
             $table->string('brand_name')->nullable();
             $table->text('description');
             $table->unsignedInteger('price');
-            //画像パスの保存
             $table->string('image');
             $table->boolean('is_sold')->default(false);
             $table->timestamps();
         });
     }
 
+    // itemsテーブルを削除
     public function down(): void
     {
         Schema::dropIfExists('items');

@@ -9,20 +9,20 @@ class Comment extends Model
 {
     use HasFactory;
 
-    //一括代入を許可するカラム
+    // 一括代入を許可するカラム
     protected $fillable = [
         'user_id',
         'item_id',
         'comment',
     ];
 
-    // コメントを投稿したユーザーを取得
+    // コメントしたユーザー
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // コメントが投稿された商品を取得
+    // コメントされた商品
     public function item()
     {
         return $this->belongsTo(Item::class);

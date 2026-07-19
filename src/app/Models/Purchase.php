@@ -19,13 +19,13 @@ class Purchase extends Model
         'building',
     ];
 
-    // 商品を購入したユーザーを取得する
+    // 購入したユーザー
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // 購入された商品を取得する
+    // 購入された商品
     public function item()
     {
         return $this->belongsTo(Item::class);

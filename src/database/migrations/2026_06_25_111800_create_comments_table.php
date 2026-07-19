@@ -6,18 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // commentsテーブルを作成
     public function up(): void
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+
+            // コメントしたユーザーID
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            // コメントされた商品ID
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
-            //コメントは255字以内で可能
+
+            // コメント本文
             $table->string('comment', 255);
+
             $table->timestamps();
         });
     }
 
+    // commentsテーブルを削除
     public function down(): void
     {
         Schema::dropIfExists('comments');
