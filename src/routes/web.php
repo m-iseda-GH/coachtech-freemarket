@@ -43,10 +43,20 @@ Route::get('/purchase/{item}', [PurchaseController::class, 'show'])
     ->middleware(['auth', 'verified'])
     ->name('purchase.show');
 
-// 購入処理
+// Stripe Checkout開始
 Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('purchase.store');
+
+// Stripe決済成功後の処理
+Route::get('/purchase/{item}/success', [PurchaseController::class, 'success'])
+    ->middleware(['auth', 'verified'])
+    ->name('purchase.success');
+
+// Stripe決済キャンセル後の処理
+Route::get('/purchase/{item}/cancel', [PurchaseController::class, 'cancel'])
+    ->middleware(['auth', 'verified'])
+    ->name('purchase.cancel');
 
 // 配送先住所変更画面
 Route::get('/purchase/address/{item}', [PurchaseController::class, 'editAddress'])
