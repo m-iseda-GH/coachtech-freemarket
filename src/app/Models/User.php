@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,13 +23,13 @@ class User extends Authenticatable
         'building',
     ];
 
-    // 配列やJSONに変換するときに非表示にするカラム
+    // 配列変換時に非表示にするカラム
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // カラムの型変換
+    // 型変換を行うカラム
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -62,7 +62,6 @@ class User extends Authenticatable
     // ユーザーがいいねした商品
     public function likedItems()
     {
-        return $this->belongsToMany(Item::class, 'likes')
-            ->withTimestamps();
+        return $this->belongsToMany(Item::class, 'likes')->withTimestamps();
     }
 }

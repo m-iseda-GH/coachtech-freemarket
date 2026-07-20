@@ -20,6 +20,15 @@ class CommentRequest extends FormRequest
         ];
     }
 
+    // バリデーションエラーメッセージ
+    public function messages(): array
+    {
+        return [
+            'comment.required' => 'コメントを入力してください',
+            'comment.max' => 'コメントは255文字以内で入力してください',
+        ];
+    }
+
     // バリデーションエラー時の項目名
     public function attributes(): array
     {

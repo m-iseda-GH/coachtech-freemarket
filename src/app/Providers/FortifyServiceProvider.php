@@ -7,59 +7,69 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
-use Override;
+use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    // サービス登録
     public function register(): void
     {
-        // 会員登録後のリダイレクト先を設定
         $this->app->singleton(RegisterResponse::class, function () {
             return new class implements RegisterResponse {
-                #[Override]
                 public function toResponse($request)
                 {
-                    return redirect('/mypage/profile');
+                    if (
+                        $request->user() instanceof MustVerifyEmail &&
+                        ! $request->user()->hasVerifiedEmail()
+                    ) {
+                        return redirect()->route('verification.notice');
+                    }
+
+                    return redirect()->intended('/mypage/profile');
                 }
             };
         });
     }
 
-    // Fortifyの各種設定
+    // Fortify設定
     public function boot(): void
     {
-        // Fortifyで使用する処理を登録
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-        Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
-        // 会員登録画面を設定
+        // 会員登録画面
         Fortify::registerView(function () {
             return view('auth.register');
         });
 
-        // ログイン画面を設定
+        // ログイン画面
         Fortify::loginView(function () {
             return view('auth.login');
         });
 
-        // ログイン試行回数を制限
-        RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
+        // メール認証案内画面
+        Fortify::verifyEmailView(function (Request $request) {
+            if ($request->user() && $request->user()->hasVerifiedEmail()) {
+                return redirect()->route('profile.edit');
+            }
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return view('auth.verify-email');
         });
 
-        // 二段階認証の試行回数を制限
+        RateLimiter::for('login', function (Request $request) {
+            $email = (string) $request->input(Fortify::username());
+
+            return Limit::perMinute(5)->by(Str::lower($email) . '|' . $request->ip());
+        });
+
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });

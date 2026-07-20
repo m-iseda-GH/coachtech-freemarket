@@ -122,28 +122,36 @@ class ItemController extends Controller
     // いいねを追加・解除
     public function toggleLike(Item $item)
     {
-        $user = Auth::user();
+        // 売り切れの商品にはいいね不可
+        if ($item->is_sold) {
+            return back()->with('error', '売り切れの商品にはいいねできません。');
+        }
 
         $like = $item->likes()
-            ->where('user_id', $user->id)
+            ->where('user_id', auth()->id())
             ->first();
 
         if ($like) {
-            // いいね済みなら解除
             $like->delete();
-        } else {
-            // 未いいねなら追加
-            $item->likes()->create([
-                'user_id' => $user->id,
-            ]);
+
+            return back()->with('message', 'いいねを解除しました。');
         }
 
-        return redirect()->back();
+        $item->likes()->create([
+            'user_id' => auth()->id(),
+        ]);
+
+        return back()->with('message', 'いいねしました。');
     }
 
     // コメントを投稿
     public function storeComment(CommentRequest $request, Item $item)
     {
+        // 売り切れの商品にはコメント不可
+        if ($item->is_sold) {
+            return back()->with('error', '売り切れの商品にはコメントできません。');
+        }
+
         $validated = $request->validated();
 
         $item->comments()->create([

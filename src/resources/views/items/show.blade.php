@@ -5,112 +5,178 @@
     <title>商品詳細</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            color: #333;
+            overflow-x: hidden;
+            font-family: Arial, "Helvetica Neue", sans-serif;
+            color: #000;
             background: #fff;
         }
 
         a {
-            color: #333;
+            color: inherit;
             text-decoration: none;
         }
 
         button {
             cursor: pointer;
+            font-family: inherit;
         }
 
         .header {
-            height: 70px;
-            padding: 0 40px;
+            width: 100%;
+            height: 62px;
+            background: #000;
             display: flex;
             align-items: center;
-            gap: 32px;
-            border-bottom: 1px solid #ddd;
+            padding-left: 19px;
+            padding-right: 21px;
         }
 
-        .header__logo img {
-            width: 180px;
+        .header__logo-link {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header__logo {
+            width: 272px;
             display: block;
+        }
+
+        .header__search {
+            width: 496px;
+            margin: 0 auto;
+        }
+
+        .header__search-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 24px;
+            border: none;
+            border-radius: 4px;
+            color: #000;
+            font-size: 19px;
+            text-align: center;
+        }
+
+        .header__search-input::placeholder {
+            color: #000;
+            opacity: 1;
         }
 
         .header__nav {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 27px;
+            flex-shrink: 0;
         }
 
-        .header__logout-button {
-            border: none;
+        .header__link,
+        .header__logout {
+            color: #fff;
             background: none;
-            font-size: 16px;
-            color: #333;
+            border: none;
+            font-size: 19px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .header__logout {
+            padding: 0;
+        }
+
+        .header__sell {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 40px;
+            border-radius: 4px;
+            background: #fff;
+            color: #000;
+            font-size: 19px;
+            text-decoration: none;
+        }
+
+        .content-scale {
+            width: 142.857%;
+            min-height: 142.857vh;
+            transform: scale(0.7);
+            transform-origin: top left;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 40px;
+            width: 1280px;
+            margin: 88px auto 0;
         }
 
         .detail {
             display: grid;
-            grid-template-columns: 45% 55%;
-            gap: 56px;
+            grid-template-columns: 600px 1fr;
+            column-gap: 110px;
             align-items: flex-start;
         }
 
         .detail__image-area {
-            width: 100%;
+            width: 600px;
         }
 
         .detail__image {
-            width: 100%;
-            max-width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             object-fit: cover;
-            background: #f2f2f2;
+            display: block;
+            background: #d9d9d9;
         }
 
         .detail__content {
             width: 100%;
+            padding-top: 0;
         }
 
         .detail__name {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 0 0 8px;
+            margin: 0 0 6px;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.25;
         }
 
         .detail__brand {
-            font-size: 14px;
-            margin: 0 0 24px;
+            margin: 0 0 28px;
+            font-size: 18px;
+            line-height: 1.4;
         }
 
         .detail__price {
-            font-size: 28px;
-            margin: 0 0 20px;
+            margin: 0 0 22px;
+            font-size: 34px;
+            line-height: 1;
         }
 
-        .sold-label {
-            display: inline-block;
-            color: #fff;
-            background: #ff5555;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-bottom: 16px;
+        .detail__tax {
+            font-size: 22px;
         }
 
         .reaction {
             display: flex;
-            gap: 32px;
-            margin-bottom: 24px;
+            align-items: flex-start;
+            gap: 34px;
+            margin-bottom: 22px;
+            padding-left: 34px;
         }
 
         .reaction__item {
+            width: 42px;
             text-align: center;
+        }
+
+        .reaction__item form {
+            margin: 0;
         }
 
         .reaction__button {
@@ -120,100 +186,127 @@
         }
 
         .reaction__icon {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
+            display: block;
+        }
+
+        .reaction__icon--disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .reaction__count {
-            margin: 4px 0 0;
-            font-size: 16px;
+            margin: 5px 0 0;
+            font-size: 14px;
+            font-weight: 700;
         }
 
         .purchase-button {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            max-width: 520px;
-            padding: 14px 0;
+            height: 56px;
+            margin: 0 0 32px;
+            border: none;
+            border-radius: 4px;
             background: #ff5555;
             color: #fff;
-            border-radius: 4px;
+            font-size: 24px;
+            font-weight: 700;
             text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 24px;
         }
 
         .delete-button {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            max-width: 520px;
-            padding: 12px 0;
-            background: #fff;
-            color: #ff5555;
+            height: 56px;
+            margin: 0 0 32px;
             border: 1px solid #ff5555;
             border-radius: 4px;
+            background: #fff;
+            color: #ff5555;
+            font-size: 22px;
+            font-weight: 700;
             text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 24px;
+        }
+
+        .sold-message,
+        .error-message {
+            margin: 0 0 28px;
+            color: #ff0000;
+            font-size: 16px;
         }
 
         .message {
-            margin-bottom: 24px;
+            width: 1280px;
+            margin: 0 auto 24px;
             color: green;
-        }
-
-        .error-message {
-            margin-bottom: 24px;
-            color: red;
+            font-size: 16px;
         }
 
         .section {
-            margin-top: 32px;
+            margin-top: 34px;
         }
 
         .section__title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 16px;
+            margin: 0 0 28px;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.3;
         }
 
         .description {
+            margin: 0;
+            font-size: 18px;
             line-height: 1.8;
             white-space: pre-wrap;
         }
 
         .info-row {
             display: flex;
-            align-items: flex-start;
-            gap: 24px;
-            margin-bottom: 16px;
+            align-items: center;
+            margin-bottom: 22px;
+            font-size: 16px;
         }
 
         .info-row__label {
-            min-width: 120px;
-            font-weight: bold;
+            width: 150px;
+            font-size: 17px;
+            font-weight: 700;
         }
 
         .category-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 14px;
         }
 
         .category-tag {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #f0f0f0;
-            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 74px;
+            height: 26px;
+            padding: 0 16px;
+            border-radius: 20px;
+            background: #e5e5e5;
             font-size: 14px;
         }
 
         .comments {
-            max-width: 1200px;
-            margin: 48px auto 0;
-            padding: 0 40px 40px;
+            margin-top: 48px;
+        }
+
+        .comments__title {
+            margin: 0 0 20px;
+            color: #5f5f5f;
+            font-size: 28px;
+            font-weight: 700;
         }
 
         .comment {
@@ -221,161 +314,308 @@
         }
 
         .comment__user {
-            font-weight: bold;
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .comment__avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #d9d9d9;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .comment__name {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
         }
 
         .comment__body {
-            background: #f5f5f5;
-            padding: 12px;
+            width: 100%;
+            margin: 0;
+            padding: 14px 16px;
             border-radius: 4px;
+            background: #e5e5e5;
+            font-size: 16px;
+            line-height: 1.6;
             white-space: pre-wrap;
+        }
+
+        .comment-empty {
+            margin: 0 0 24px;
+            font-size: 16px;
+        }
+
+        .comment-form {
+            margin-top: 28px;
+        }
+
+        .comment-form__label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 22px;
+            font-weight: 700;
         }
 
         .comment-form textarea {
             width: 100%;
-            max-width: 700px;
-            min-height: 120px;
-            padding: 10px;
+            height: 180px;
+            padding: 12px;
+            border: 1px solid #5f5f5f;
+            border-radius: 4px;
             font-size: 16px;
+            resize: vertical;
         }
 
         .comment-form button {
-            display: block;
             width: 100%;
-            max-width: 700px;
-            margin-top: 16px;
-            padding: 12px 0;
-            background: #ff5555;
-            color: #fff;
+            height: 56px;
+            margin-top: 28px;
             border: none;
             border-radius: 4px;
-            font-size: 18px;
-            font-weight: bold;
+            background: #ff5555;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        @media screen and (max-width: 900px) {
+            .content-scale {
+                width: 100%;
+                min-height: 100vh;
+                transform: none;
+            }
+
+            .header {
+                height: auto;
+                min-height: 62px;
+                flex-wrap: wrap;
+                padding: 14px 18px;
+            }
+
+            .header__logo {
+                width: 230px;
+            }
+
+            .header__search {
+                order: 3;
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            .header__search-input {
+                font-size: 18px;
+            }
+
+            .header__nav {
+                margin-left: auto;
+                gap: 18px;
+            }
+
+            .header__link,
+            .header__logout {
+                font-size: 17px;
+            }
+
+            .header__sell {
+                width: 74px;
+                height: 38px;
+                font-size: 17px;
+            }
+
+            .container {
+                width: 100%;
+                margin: 40px auto 0;
+                padding: 0 24px;
+            }
+
+            .detail {
+                display: block;
+            }
+
+            .detail__image-area,
+            .detail__image {
+                width: 100%;
+            }
+
+            .detail__image {
+                height: auto;
+                aspect-ratio: 1 / 1;
+            }
+
+            .detail__content {
+                margin-top: 32px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .header__nav {
+                width: 100%;
+                justify-content: space-between;
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .header__link,
+            .header__logout,
+            .header__sell {
+                font-size: 16px;
+            }
+
+            .detail__name {
+                font-size: 28px;
+            }
+
+            .detail__price {
+                font-size: 26px;
+            }
+
+            .section__title,
+            .comments__title {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    {{-- ヘッダー --}}
     <header class="header">
-        <a href="{{ url('/') }}" class="header__logo">
+        <a class="header__logo-link" href="{{ url('/') }}">
             <img
+                class="header__logo"
                 src="{{ asset('images/header-logo.png') }}"
                 alt="COACHTECH"
             >
         </a>
 
+        <form class="header__search" action="{{ url('/') }}" method="GET">
+            <input
+                class="header__search-input"
+                type="text"
+                name="keyword"
+                placeholder="なにをお探しですか？"
+            >
+        </form>
+
         <nav class="header__nav">
-            <a href="{{ url('/') }}">商品一覧</a>
-
             @auth
-                <a href="{{ route('mypage.index') }}">マイページ</a>
-                <a href="{{ route('items.create') }}">出品</a>
-
                 <form action="{{ url('/logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="header__logout-button">
-                        ログアウト
-                    </button>
+                    <button class="header__logout" type="submit">ログアウト</button>
                 </form>
             @else
-                <a href="{{ url('/login') }}">ログイン</a>
-                <a href="{{ url('/register') }}">会員登録</a>
+                <a class="header__link" href="{{ url('/login') }}">ログイン</a>
             @endauth
+
+            <a class="header__link" href="{{ route('mypage.index') }}">マイページ</a>
+            <a class="header__sell" href="{{ route('items.create') }}">出品</a>
         </nav>
     </header>
 
-    <main class="container">
-        @if (session('message'))
-            <p class="message">{{ session('message') }}</p>
-        @endif
+    <div class="content-scale">
+        <main class="container">
+            @if (session('message'))
+                <p class="message">{{ session('message') }}</p>
+            @endif
 
-        @if (session('error'))
-            <p class="error-message">{{ session('error') }}</p>
-        @endif
+            @if (session('error'))
+                <p class="error-message">{{ session('error') }}</p>
+            @endif
 
-        <div class="detail">
-            {{-- 商品画像 --}}
-            <div class="detail__image-area">
-                @if (\Illuminate\Support\Str::startsWith($item->image, ['http://', 'https://']))
-                    <img
-                        src="{{ $item->image }}"
-                        alt="{{ $item->name }}"
-                        class="detail__image"
-                    >
-                @else
-                    <img
-                        src="{{ asset('storage/' . $item->image) }}"
-                        alt="{{ $item->name }}"
-                        class="detail__image"
-                    >
-                @endif
-            </div>
-
-            {{-- 商品情報 --}}
-            <div class="detail__content">
-                <h1 class="detail__name">{{ $item->name }}</h1>
-
-                <p class="detail__brand">
-                    ブランド：{{ $item->brand_name ?? 'なし' }}
-                </p>
-
-                <p class="detail__price">
-                    ¥{{ number_format($item->price) }}
-                </p>
-
-                @if ($item->is_sold)
-                    <p class="sold-label">Sold</p>
-                @endif
-
-                {{-- いいね・コメント数 --}}
-                <div class="reaction">
-                    <div class="reaction__item">
-                        @auth
-                            <form action="{{ route('items.like', $item) }}" method="POST">
-                                @csrf
-
-                                <button type="submit" class="reaction__button">
-                                    @if ($isLiked)
-                                        <img
-                                            src="{{ asset('images/like-icon-active.png') }}"
-                                            alt="いいね済み"
-                                            class="reaction__icon"
-                                        >
-                                    @else
-                                        <img
-                                            src="{{ asset('images/like-icon-default.png') }}"
-                                            alt="いいね"
-                                            class="reaction__icon"
-                                        >
-                                    @endif
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ url('/login') }}">
-                                <img
-                                    src="{{ asset('images/like-icon-default.png') }}"
-                                    alt="いいね"
-                                    class="reaction__icon"
-                                >
-                            </a>
-                        @endauth
-
-                        <p class="reaction__count">{{ $item->likes_count }}</p>
-                    </div>
-
-                    <div class="reaction__item">
+            <div class="detail">
+                <div class="detail__image-area">
+                    @if (\Illuminate\Support\Str::startsWith($item->image, ['http://', 'https://']))
                         <img
-                            src="{{ asset('images/comment-icon.png') }}"
-                            alt="コメント"
-                            class="reaction__icon"
+                            class="detail__image"
+                            src="{{ $item->image }}"
+                            alt="{{ $item->name }}"
                         >
-                        <p class="reaction__count">{{ $item->comments_count }}</p>
-                    </div>
+                    @else
+                        <img
+                            class="detail__image"
+                            src="{{ asset('storage/' . $item->image) }}"
+                            alt="{{ $item->name }}"
+                        >
+                    @endif
                 </div>
 
-                {{-- 購入・削除 --}}
-                <div>
+                <div class="detail__content">
+                    <h1 class="detail__name">{{ $item->name }}</h1>
+
+                    <p class="detail__brand">
+                        ブランド：{{ $item->brand_name ?? 'なし' }}
+                    </p>
+
+                    <p class="detail__price">
+                        ¥{{ number_format($item->price) }}
+                        <span class="detail__tax">（税込）</span>
+                    </p>
+
+                    <div class="reaction">
+                        <div class="reaction__item">
+                            @if ($item->is_sold)
+                                @if ($isLiked)
+                                    <img
+                                        class="reaction__icon reaction__icon--disabled"
+                                        src="{{ asset('images/like-icon-active.png') }}"
+                                        alt="いいね済み"
+                                    >
+                                @else
+                                    <img
+                                        class="reaction__icon reaction__icon--disabled"
+                                        src="{{ asset('images/like-icon-default.png') }}"
+                                        alt="いいね不可"
+                                    >
+                                @endif
+                            @else
+                                @auth
+                                    <form action="{{ route('items.like', $item) }}" method="POST">
+                                        @csrf
+
+                                        <button class="reaction__button" type="submit">
+                                            @if ($isLiked)
+                                                <img
+                                                    class="reaction__icon"
+                                                    src="{{ asset('images/like-icon-active.png') }}"
+                                                    alt="いいね済み"
+                                                >
+                                            @else
+                                                <img
+                                                    class="reaction__icon"
+                                                    src="{{ asset('images/like-icon-default.png') }}"
+                                                    alt="いいね"
+                                                >
+                                            @endif
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ url('/login') }}">
+                                        <img
+                                            class="reaction__icon"
+                                            src="{{ asset('images/like-icon-default.png') }}"
+                                            alt="いいね"
+                                        >
+                                    </a>
+                                @endauth
+                            @endif
+
+                            <p class="reaction__count">{{ $item->likes_count }}</p>
+                        </div>
+
+                        <div class="reaction__item">
+                            <img
+                                class="reaction__icon"
+                                src="{{ asset('images/comment-icon.png') }}"
+                                alt="コメント"
+                            >
+                            <p class="reaction__count">{{ $item->comments_count }}</p>
+                        </div>
+                    </div>
+
                     @auth
                         @if ($item->user_id === auth()->id())
                             @if (!$item->is_sold)
@@ -387,109 +627,130 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="delete-button">
+                                    <button class="delete-button" type="submit">
                                         商品を削除する
                                     </button>
                                 </form>
                             @else
-                                <p class="error-message">購入済みの商品は削除できません。</p>
+                                <p class="sold-message">購入済みの商品は削除できません。</p>
                             @endif
                         @else
                             @if (!$item->is_sold)
-                                <a href="{{ route('purchase.show', $item) }}" class="purchase-button">
+                                <a class="purchase-button" href="{{ route('purchase.show', $item) }}">
                                     購入手続きへ
                                 </a>
                             @else
-                                <p class="error-message">この商品は売り切れです。</p>
+                                <p class="sold-message">この商品は売り切れです。</p>
                             @endif
                         @endif
                     @else
                         @if (!$item->is_sold)
-                            <a href="{{ url('/login') }}" class="purchase-button">
-                                ログインして購入する
+                            <a class="purchase-button" href="{{ route('purchase.show', $item) }}">
+                                購入手続きへ
                             </a>
                         @else
-                            <p class="error-message">この商品は売り切れです。</p>
+                            <p class="sold-message">この商品は売り切れです。</p>
                         @endif
                     @endauth
-                </div>
 
-                {{-- 商品説明 --}}
-                <section class="section">
-                    <h2 class="section__title">商品説明</h2>
-                    <p class="description">{{ $item->description }}</p>
-                </section>
+                    <section class="section">
+                        <h2 class="section__title">商品説明</h2>
+                        <p class="description">{{ $item->description }}</p>
+                    </section>
 
-                {{-- 商品情報 --}}
-                <section class="section">
-                    <h2 class="section__title">商品の情報</h2>
+                    <section class="section">
+                        <h2 class="section__title">商品の情報</h2>
 
-                    <div class="info-row">
-                        <div class="info-row__label">カテゴリー</div>
-                        <div class="category-list">
-                            @foreach ($item->categories as $category)
-                                <span class="category-tag">
-                                    {{ $category->name }}
-                                </span>
+                        <div class="info-row">
+                            <div class="info-row__label">カテゴリー</div>
+
+                            <div class="category-list">
+                                @foreach ($item->categories as $category)
+                                    <span class="category-tag">
+                                        {{ $category->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-row__label">商品の状態</div>
+                            <div>{{ $item->condition->name }}</div>
+                        </div>
+                    </section>
+
+                    <section class="comments">
+                        <h2 class="comments__title">
+                            コメント({{ $item->comments_count }})
+                        </h2>
+
+                        @if ($item->comments->isEmpty())
+                            <p class="comment-empty">コメントはまだありません。</p>
+                        @else
+                            @foreach ($item->comments as $comment)
+                                <div class="comment">
+                                    <div class="comment__user">
+                                        @if ($comment->user->profile_image)
+                                            <img
+                                                class="comment__avatar"
+                                                src="{{ asset('storage/' . $comment->user->profile_image) }}"
+                                                alt="{{ $comment->user->name }}"
+                                            >
+                                        @else
+                                            <div class="comment__avatar"></div>
+                                        @endif
+
+                                        <p class="comment__name">
+                                            {{ $comment->user->name }}
+                                        </p>
+                                    </div>
+
+                                    <p class="comment__body">
+                                        {{ $comment->comment }}
+                                    </p>
+                                </div>
                             @endforeach
+                        @endif
+
+                        <div class="comment-form">
+                            <label class="comment-form__label" for="comment">
+                                商品へのコメント
+                            </label>
+
+                            @if ($item->is_sold)
+                                <p class="sold-message">
+                                    売り切れの商品にはコメントできません。
+                                </p>
+                            @else
+                                @auth
+                                    <form action="{{ route('items.comment', $item) }}" method="POST">
+                                        @csrf
+
+                                        <textarea id="comment" name="comment">{{ old('comment') }}</textarea>
+
+                                        @error('comment')
+                                            <p class="error-message">{{ $message }}</p>
+                                        @enderror
+
+                                        <button type="submit">
+                                            コメントを送信する
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ url('/login') }}" method="GET">
+                                        <textarea id="comment" name="comment">{{ old('comment') }}</textarea>
+
+                                        <button type="submit">
+                                            コメントを送信する
+                                        </button>
+                                    </form>
+                                @endauth
+                            @endif
                         </div>
-                    </div>
-
-                    <div class="info-row">
-                        <div class="info-row__label">商品の状態</div>
-                        <div>
-                            {{ $item->condition->name }}
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </main>
-
-    {{-- コメント --}}
-    <section class="comments">
-        <h2 class="section__title">コメント</h2>
-
-        @if ($item->comments->isEmpty())
-            <p>コメントはまだありません。</p>
-        @else
-            @foreach ($item->comments as $comment)
-                <div class="comment">
-                    <p class="comment__user">{{ $comment->user->name }}</p>
-                    <p class="comment__body">{{ $comment->comment }}</p>
+                    </section>
                 </div>
-            @endforeach
-        @endif
-
-        <div class="section">
-            <h2 class="section__title">商品へのコメント</h2>
-
-            @auth
-                <form
-                    action="{{ route('items.comment', $item) }}"
-                    method="POST"
-                    class="comment-form"
-                >
-                    @csrf
-
-                    <textarea name="comment">{{ old('comment') }}</textarea>
-
-                    @error('comment')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
-
-                    <button type="submit">
-                        コメントを送信する
-                    </button>
-                </form>
-            @else
-                <p>
-                    コメントするには
-                    <a href="{{ url('/login') }}">ログイン</a>
-                    してください。
-                </p>
-            @endauth
-        </div>
-    </section>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

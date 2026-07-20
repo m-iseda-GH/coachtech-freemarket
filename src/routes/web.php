@@ -15,51 +15,51 @@ Route::get('/item/{item}', [ItemController::class, 'show'])
 
 // 商品削除処理
 Route::delete('/item/{item}', [ItemController::class, 'destroy'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('items.destroy');
 
 // 商品出品画面
 Route::get('/sell', [ItemController::class, 'create'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('items.create');
 
 // 商品出品処理
 Route::post('/sell', [ItemController::class, 'store'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('items.store');
 
 // いいねの追加・削除
 Route::post('/item/{item}/like', [ItemController::class, 'toggleLike'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('items.like');
 
 // コメント投稿
 Route::post('/item/{item}/comment', [ItemController::class, 'storeComment'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('items.comment');
 
 // 購入画面
 Route::get('/purchase/{item}', [PurchaseController::class, 'show'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('purchase.show');
 
 // 購入処理
 Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('purchase.store');
 
 // 配送先住所変更画面
 Route::get('/purchase/address/{item}', [PurchaseController::class, 'editAddress'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('purchase.address.edit');
 
 // 配送先住所更新
 Route::post('/purchase/address/{item}', [PurchaseController::class, 'updateAddress'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('purchase.address.update');
 
 // マイページ・プロフィール関連
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage', [MypageController::class, 'index'])
         ->name('mypage.index');
 
