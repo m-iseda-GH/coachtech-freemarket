@@ -35,7 +35,7 @@ coachtechフリマアプリは、ユーザーが商品の出品・閲覧・い�
 
 | 技術 | バージョン |
 | --- | --- |
-| PHP | 8.2 |
+| PHP | 8.2.35 |
 | Laravel | 10.x |
 | MySQL | 8.0.26 |
 | nginx | 1.21.1 |
@@ -44,7 +44,6 @@ coachtechフリマアプリは、ユーザーが商品の出品・閲覧・い�
 | Laravel Fortify | - |
 | Stripe PHP SDK | v21.0.0 |
 | MailHog | - |
-
 
 ## ER図
 
@@ -292,3 +291,15 @@ Stripe Checkoutの動作確認時は「カード支払い」を選択してく�
 - 未ログイン状態でマイリストを開いた場合、ログイン案内を表示します。
 - `.env` はGit管理に含めないでください。
 - Stripeのシークレットキーを含む `.env` はGitHubに公開しないでください。
+
+## セキュリティ対応履歴
+
+### 2026年10月24日：PHPの脆弱性対策
+
+PHPの脆弱性対策として、PHP 8.2.35を使用する構成に更新しました。
+
+#### 対応内容
+
+- Dockerfileのベースイメージを`php:8.2.35-fpm`に指定
+- `docker compose build --pull php`でPHPのDockerイメージを再構築
+- `docker compose run --rm --no-deps php php -v`で`PHP 8.2.35`を確認
